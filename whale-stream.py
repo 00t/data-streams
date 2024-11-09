@@ -80,8 +80,11 @@ async def trade_handler(symbol, trade_aggregator):
 
                         # Determine trade type
                         trade_type = "SELL" if data['m'] else "BUY"
-                        # Print trade details for debugging
-                        print(f"{trade_type} {symbol} ${float(data['p']):.2f} - Size: {float(data['q']):.8f} - Total: ${usd_size:.2f}")
+                        # Only print trades above $1000
+                        if usd_size > 1000:
+                            back_color = 'on_blue' if not data['m'] else 'on_magenta'
+                            cprint(f"{trade_type} {symbol} ${float(data['p']):.2f} Size: {float(data['q']):.8f} Total: ${usd_size:.2f}", 
+                                   'white', back_color)
 
                         display_symbol = symbol.upper().replace('USDT', '')
                         await trade_aggregator.add_trade(
